@@ -2,14 +2,14 @@ package com.example.arena;
 
 public abstract class Creature {
 
-    private String creatureType;
+    private CreatureType creatureType;
     private Integer strength;
     private Integer dexterity;
     private Integer defence;
     private Integer endurance;
     private Integer lifePoints;
 
-    public Creature(String creatureType,
+    public Creature(CreatureType creatureType,
                     Integer strength,
                     Integer dexterity,
                     Integer defence,
