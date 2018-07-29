@@ -1,6 +1,6 @@
 package com.example.arena;
 
-public abstract class Creature {
+public abstract class Creature implements Fightable {
 
     private CreatureType creatureType;
     private Integer strength;
@@ -23,6 +23,49 @@ public abstract class Creature {
         this.lifePoints = lifePoints;
     }
 
+
+    @Override
+    public int attack() {
+        boolean successfulAttack = dexterity > CreatureFactory.random(1, 10);
+        if (successfulAttack) {
+            int potentialDamage = strength + CreatureFactory.random(0, 3);
+            info("Attacking with potential damage: " + potentialDamage);
+            return potentialDamage;
+        } else {
+            info("Attack failed");
+            return 0;
+        }
+    }
+
+    @Override
+    public void dodge(int potentialDamage) {
+        boolean successfulDodge = defence > CreatureFactory.random(1, 10);
+        if (successfulDodge) {
+            info("Attack succefully dodged");
+        } else {
+            int effectiveDamage = potentialDamage - endurance;
+            if (effectiveDamage > 0) {
+                info("Got hit. Damages: " + effectiveDamage);
+                lifePoints = Math.max(0, lifePoints - effectiveDamage);
+                if (lifePoints > 0) {
+                    info("Life points left: " + lifePoints);
+                } else {
+                    info("I'm dead :(");
+                }
+            } else {
+                info("Ha ha! Your hit was too weak: " + effectiveDamage);
+            }
+        }
+    }
+
+    public boolean isAlive() {
+        return lifePoints > 0;
+    }
+
+    private void info(String s) {
+        System.out.println(creatureType + " : " + s);
+    }
+
     @Override
     public String toString() {
         return "Creature{" +
@@ -34,4 +77,5 @@ public abstract class Creature {
                 ", lifePoints=" + lifePoints +
                 '}';
     }
+
 }
