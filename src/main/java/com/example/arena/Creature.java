@@ -55,18 +55,18 @@ public abstract class Creature implements Fightable {
     }
 
     private boolean successfulAttack(int attempt) {
-        return attempt == 1 || dexterity > CreatureFactory.random(1, 10);
+        return attempt == 1 || dexterity > RandomUtil.random(1, 10);
     }
 
     int calculatePotentialDamage(BodyPart hitBodyPart) {
-        return strength + CreatureFactory.random(0, 3) + hitBodyPart
+        return strength + RandomUtil.random(0, 3) + hitBodyPart
                 .getHitBonus();
     }
 
     @Override
     public AttackResult dodge(AttackResult attack) {
         int effectiveDamage = 0;
-        boolean successfulDodge = defence > CreatureFactory.random(1, 10);
+        boolean successfulDodge = defence > RandomUtil.random(1, 10);
         if (successfulDodge) {
             info("Attack succefully dodged");
         } else {
@@ -92,7 +92,7 @@ public abstract class Creature implements Fightable {
     }
 
     public static BodyPart hitBodyPart() throws NoBodyPartHitException {
-        int random = CreatureFactory.random(1, 100);
+        int random = RandomUtil.random(1, 100);
         int offset = 0;
         for (BodyPart bodyPart : BodyPart.values()) {
             if (offset + bodyPart.getHitProbability() >= random) {

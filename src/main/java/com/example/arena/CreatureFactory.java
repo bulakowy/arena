@@ -12,10 +12,6 @@ public class CreatureFactory {
         return CreatureType.values()[randomIdx];
     }
 
-    static int random(int min, int max) {
-        return new Random().nextInt(max - min + 1) + min;
-    }
-
     public Creature randomCreature() {
         CreatureType creatureType = randomCreatureType();
         switch (creatureType) {
@@ -33,6 +29,10 @@ public class CreatureFactory {
             default:
                 return new Troll(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(100, 100));
         }
+    }
+
+    private int random(int min, int max) {
+        return RandomUtil.random(min, max);
     }
 
     public List<Creature> randomCreatureList(int listSize) {
