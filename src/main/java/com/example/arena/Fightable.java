@@ -2,10 +2,8 @@ package com.example.arena;
 
 public interface Fightable {
 
-    int attack();
+    AttackResult attack();
 
-    void dodge(int potentialDamage);
-
-    boolean isAlive();
+    AttackResult dodge(AttackResult attackResult);
 
 }
