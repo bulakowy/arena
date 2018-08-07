@@ -14,19 +14,24 @@ public class CreatureFactory {
         CreatureType creatureType = randomCreatureType();
         switch (creatureType) {
             case DWARF:
-                return new Dwarf(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(100, 100),
+                return new Dwarf(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
                         randomProtection());
             case ELF:
-                return new Elf(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(100, 100), randomProtection());
+                return new Elf(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
+                        randomProtection());
             case HALFING:
-                return new Halfing(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(100, 100), randomProtection());
+                return new Halfing(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
+                        randomProtection());
             case HUMAN:
-                return new Human(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(100, 100), randomProtection());
+                return new Human(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
+                        randomProtection());
             case ORC:
-                return new Orc(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(100, 100), randomProtection());
+                return new Orc(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
+                        randomProtection());
             case TROLL:
             default:
-                return new Troll(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(100, 100), randomProtection());
+                return new Troll(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
+                        randomProtection());
         }
     }
 

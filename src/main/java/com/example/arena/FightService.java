@@ -81,4 +81,31 @@ public class FightService {
                 strongestHit + " by " + strongestHitter.getCreatureType());
     }
 
+    List<CreaturePair> generateDistinctCreaturePairs(List<Creature> creatures) {
+        validateInput(creatures);
+        List<CreaturePair> ret = new ArrayList<>();
+        for (int i = 0; i < creatures.size() - 1; i++) {
+            for (int j = i + 1; j < creatures.size(); j++) {
+                ret.add(new CreaturePair(creatures.get(i), creatures.get(j)));
+            }
+        }
+        return ret;
+    }
+
+    private void validateInput(Collection<Creature> creatures) {
+        if (creatures == null) {
+            throw new NullPointerException("Creature collection must not be null.");
+        }
+        if (creatures.size() < 2) {
+            throw new IllegalArgumentException("Too few creatures. Minimum required: 2.");
+        }
+        if (containsDuplicates(creatures)) {
+            throw new IllegalArgumentException("Creature collections must not contain duplicates.");
+        }
+    }
+
+    private <T> boolean containsDuplicates(Collection<T> collection) {
+        return collection.size() != new HashSet<>(collection).size();
+    }
+
 }

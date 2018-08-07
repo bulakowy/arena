@@ -2,6 +2,7 @@ package com.example.arena;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public abstract class Creature implements Fightable {
@@ -40,12 +41,12 @@ public abstract class Creature implements Fightable {
     private AttackResult attack(int attempt) {
         info("Attack! Attempt " + attempt);
         if (successfulAttack(attempt)) {
-            try {
-                BodyPart hitBodyPart = hitBodyPart();
-                int potentialDamage = calculatePotentialDamage(hitBodyPart);
+            Optional<BodyPart> hitBodyPart = hitBodyPart();
+            if (hitBodyPart.isPresent()) {
+                int potentialDamage = calculatePotentialDamage(hitBodyPart.get());
                 info("Attacking " + hitBodyPart + " with potential damage: " + potentialDamage);
-                return new AttackResult(hitBodyPart, attempt, potentialDamage);
-            } catch (NoBodyPartHitException e) {
+                return new AttackResult(hitBodyPart.get(), attempt, potentialDamage);
+            } else {
                 if (attempt < MAX_ATTACK_ATTEMPTS) {
                     info("Trying to attack again");
                     return attack(attempt + 1);
@@ -112,17 +113,17 @@ public abstract class Creature implements Fightable {
         return lifePoints > 0;
     }
 
-    public static BodyPart hitBodyPart() throws NoBodyPartHitException {
+    public Optional<BodyPart> hitBodyPart() {
         int random = RandomUtil.random(1, 100);
         int offset = 0;
         for (BodyPart bodyPart : BodyPart.values()) {
             if (offset + bodyPart.getHitProbability() >= random) {
-                return bodyPart;
+                return Optional.of(bodyPart);
             } else {
                 offset += bodyPart.getHitProbability();
             }
         }
-        throw new NoBodyPartHitException();
+        return Optional.empty();
     }
 
     private void info(String s) {
