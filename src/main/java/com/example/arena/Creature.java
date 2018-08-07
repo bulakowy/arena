@@ -93,6 +93,7 @@ public abstract class Creature implements Fightable {
         return attack;
     }
 
+
     private int calculateEffectiveDamage(AttackResult attack) {
         int potentialDamage = attack.getPotentialDamage();
         int protection = calculateProtection(attack.getHitBodyPart());
@@ -103,8 +104,8 @@ public abstract class Creature implements Fightable {
     protected int calculateProtection(BodyPart hitBodyPart) {
         return protectionItems.stream()
                 .filter(item -> item.getProtectedParts().contains(hitBodyPart))
-                .map(item -> item.getMaxProtection())
-                .reduce(0, (x, y) -> x + y);
+                .mapToInt(ProtectionItem::getProtection)
+                .sum();
     }
 
     public boolean isAlive() {
