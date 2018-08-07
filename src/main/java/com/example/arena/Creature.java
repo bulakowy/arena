@@ -1,5 +1,10 @@
 package com.example.arena;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 public abstract class Creature implements Fightable {
 
     private CreatureType creatureType;
@@ -8,6 +13,7 @@ public abstract class Creature implements Fightable {
     private Integer defence;
     private Integer endurance;
     private Integer lifePoints;
+    private Set<ProtectionItem> protectionItems = new HashSet<>();
 
     private int MAX_ATTACK_ATTEMPTS = 2;
 
@@ -16,15 +22,16 @@ public abstract class Creature implements Fightable {
                     Integer dexterity,
                     Integer defence,
                     Integer endurance,
-                    Integer lifePoints) {
+                    Integer lifePoints,
+                    Collection<ProtectionItem> protectionItems) {
         this.creatureType = creatureType;
         this.strength = strength;
         this.dexterity = dexterity;
         this.defence = defence;
         this.endurance = endurance;
         this.lifePoints = lifePoints;
+        this.protectionItems.addAll(protectionItems);
     }
-
 
     @Override
     public AttackResult attack() {
@@ -34,12 +41,12 @@ public abstract class Creature implements Fightable {
     private AttackResult attack(int attempt) {
         info("Attack! Attempt " + attempt);
         if (successfulAttack(attempt)) {
-            try {
-                BodyPart hitBodyPart = hitBodyPart();
-                int potentialDamage = calculatePotentialDamage(hitBodyPart);
+            Optional<BodyPart> hitBodyPart = hitBodyPart();
+            if (hitBodyPart.isPresent()) {
+                int potentialDamage = calculatePotentialDamage(hitBodyPart.get());
                 info("Attacking " + hitBodyPart + " with potential damage: " + potentialDamage);
-                return new AttackResult(hitBodyPart, attempt, potentialDamage);
-            } catch (NoBodyPartHitException e) {
+                return new AttackResult(hitBodyPart.get(), attempt, potentialDamage);
+            } else {
                 if (attempt < MAX_ATTACK_ATTEMPTS) {
                     info("Trying to attack again");
                     return attack(attempt + 1);
@@ -70,7 +77,7 @@ public abstract class Creature implements Fightable {
         if (successfulDodge) {
             info("Attack succefully dodged");
         } else {
-            effectiveDamage = attack.getPotentialDamage() - endurance;
+            effectiveDamage = calculateEffectiveDamage(attack);
             if (effectiveDamage > 0) {
                 attack.setEffectiveDamage(effectiveDamage);
                 info("Got hit. Damage: " + effectiveDamage);
@@ -87,21 +94,36 @@ public abstract class Creature implements Fightable {
         return attack;
     }
 
+
+    private int calculateEffectiveDamage(AttackResult attack) {
+        int potentialDamage = attack.getPotentialDamage();
+        int protection = calculateProtection(attack.getHitBodyPart());
+        info("Protection: " + protection);
+        return potentialDamage - protection - endurance;
+    }
+
+    protected int calculateProtection(BodyPart hitBodyPart) {
+        return protectionItems.stream()
+                .filter(item -> item.getProtectedParts().contains(hitBodyPart))
+                .mapToInt(ProtectionItem::getProtection)
+                .sum();
+    }
+
     public boolean isAlive() {
         return lifePoints > 0;
     }
 
-    public static BodyPart hitBodyPart() throws NoBodyPartHitException {
+    public Optional<BodyPart> hitBodyPart() {
         int random = RandomUtil.random(1, 100);
         int offset = 0;
         for (BodyPart bodyPart : BodyPart.values()) {
             if (offset + bodyPart.getHitProbability() >= random) {
-                return bodyPart;
+                return Optional.of(bodyPart);
             } else {
                 offset += bodyPart.getHitProbability();
             }
         }
-        throw new NoBodyPartHitException();
+        return Optional.empty();
     }
 
     private void info(String s) {
@@ -135,13 +157,13 @@ public abstract class Creature implements Fightable {
     @Override
     public String toString() {
         return "Creature{" +
-                "creatureType='" + creatureType + '\'' +
+                "creatureType=" + creatureType +
                 ", strength=" + strength +
                 ", dexterity=" + dexterity +
                 ", defence=" + defence +
                 ", endurance=" + endurance +
                 ", lifePoints=" + lifePoints +
+                ", protectionItems=" + protectionItems +
                 '}';
     }
-
 }

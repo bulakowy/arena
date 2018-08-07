@@ -46,4 +46,5 @@ generowana była liczba sztuk pancerza, a następnie losowane były kolejne sztu
 pancerza.
 
 6. Zmodyfikuj metodę `dodge` w taki sposób, aby przy wyliczaniu otrzymanych 
-obrażeń była brana pod uwagę ochrona, którą daje pancerz.
+obrażeń była brana pod uwagę ochrona, którą daje pancerz. Ochrona powinna być
+ wartością z przedziału [min_ochrona, max_ochrona]. 
