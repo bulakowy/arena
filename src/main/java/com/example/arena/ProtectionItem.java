@@ -2,6 +2,7 @@ package com.example.arena;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static com.example.arena.BodyPart.*;
 import static com.example.arena.BodyPart.RIGHT_ARM;
@@ -33,5 +34,9 @@ public enum ProtectionItem {
 
     public int getMaxProtection() {
         return maxProtection;
+    }
+
+    public int getProtection() {
+        return RandomUtil.random(minProtection, maxProtection);
     }
 }

@@ -1,9 +1,6 @@
 package com.example.arena;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class CreatureFactory {
 
@@ -34,16 +31,19 @@ public class CreatureFactory {
     }
 
     private Collection<ProtectionItem> randomProtection() {
-        List<ProtectionItem> protectionItems = new ArrayList<>();
+        List<ProtectionItem> protectionItems = new ArrayList<>(Arrays.asList(ProtectionItem.values()));
+        List<ProtectionItem> ret = new ArrayList<>();
         int howMany = random(1, ProtectionItem.values().length);
         for (int i = 0; i < howMany; i++) {
-            protectionItems.add(randomProtectionItem());
+            ProtectionItem item = randomProtectionItem(protectionItems);
+            ret.add(item);
+            protectionItems.remove(item);
         }
-        return protectionItems;
+        return ret;
     }
 
-    private ProtectionItem randomProtectionItem() {
-        int typesCount = ProtectionItem.values().length;
+    private ProtectionItem randomProtectionItem(Collection<ProtectionItem> items) {
+        int typesCount = items.size();
         int randomIdx = new Random().nextInt(typesCount);
         return ProtectionItem.values()[randomIdx];
     }
