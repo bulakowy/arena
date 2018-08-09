@@ -10,6 +10,14 @@ public class CreaturePair {
         this.right = right;
     }
 
+    public Creature getLeft() {
+        return left;
+    }
+
+    public Creature getRight() {
+        return right;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

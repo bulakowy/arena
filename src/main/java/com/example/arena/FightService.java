@@ -4,13 +4,15 @@ import java.util.*;
 
 public class FightService {
 
-    void fight(Creature f1, Creature f2) {
+    private CreatureFactory creatureFactory = new CreatureFactory();
+
+    FightResult fight(Creature f1, Creature f2) {
 
         Map<Creature, List<AttackResult>> attacks = new HashMap<>();
         attacks.put(f1, new ArrayList<>());
         attacks.put(f2, new ArrayList<>());
 
-        System.out.println("Starting a fight between " + f1 + " and " + f2);
+        System.out.println("Starting a fight between:\n" + f1 + "\nand\n" + f2);
         while (f1.isAlive() && f2.isAlive()) {
             AttackResult res = attack(f1, f2);
             attacks.get(f1).add(res);
@@ -21,6 +23,33 @@ public class FightService {
         }
 
         printStats(attacks);
+
+        return new FightResult(f1, f2, f1.isAlive() ? f1 : f2);
+    }
+
+    void fightAll(List<Creature> creatures) {
+        List<CreaturePair> creaturePairs = generateDistinctCreaturePairs(creatures);
+        final List<FightResult> figthResults = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+        for (CreaturePair pair : creaturePairs) {
+            Thread t = new Thread(() -> {
+                FightResult result = fight(creatureFactory.copyCreature(pair.getLeft()),
+                        creatureFactory.copyCreature(pair.getRight()));
+                figthResults.add(result);
+            });
+            threads.add(t);
+            t.start();
+        }
+
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        printResults(figthResults);
     }
 
     private AttackResult attack(Creature f1, Creature f2) {
@@ -78,7 +107,7 @@ public class FightService {
             }
         }
         System.out.println("Strongest hit (by potential damage): " +
-                strongestHit + " by " + strongestHitter.getCreatureType());
+                strongestHit + " by " + strongestHitter.getName());
     }
 
     List<CreaturePair> generateDistinctCreaturePairs(List<Creature> creatures) {
@@ -106,6 +135,19 @@ public class FightService {
 
     private <T> boolean containsDuplicates(Collection<T> collection) {
         return collection.size() != new HashSet<>(collection).size();
+    }
+
+    private void printResults(List<FightResult> fightResults) {
+        Map<String, Integer> points = new HashMap<>();
+        fightResults.forEach(fr -> {
+            points.put(fr.getFirst().getName(), 0);
+            points.put(fr.getSecond().getName(), 0);
+        });
+
+        fightResults.forEach(fr -> points.put(fr.getWinner().getName(), points.get(fr.getWinner().getName()) + 1));
+
+        points.entrySet().stream().sorted(Comparator.comparing(e -> e.getValue())).forEach(entry -> System.out
+                .println(entry.getKey() + " : " + entry.getValue()));
     }
 
 }

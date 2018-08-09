@@ -1,23 +1,24 @@
 package com.example.arena;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-public abstract class Creature implements Fightable {
+public abstract class Creature implements Fightable, Cloneable {
 
-    private CreatureType creatureType;
-    private Integer strength;
-    private Integer dexterity;
-    private Integer defence;
-    private Integer endurance;
-    private Integer lifePoints;
-    private Set<ProtectionItem> protectionItems = new HashSet<>();
+    private final CreatureType creatureType;
+    private final String name;
+    private final Integer strength;
+    private final Integer dexterity;
+    private final Integer defence;
+    private final Integer endurance;
+    private final Integer lifePoints;
+    private Integer lifePointsLeft;
+
+    private final Set<ProtectionItem> protectionItems = new HashSet<>();
 
     private int MAX_ATTACK_ATTEMPTS = 2;
 
     public Creature(CreatureType creatureType,
+                    String name,
                     Integer strength,
                     Integer dexterity,
                     Integer defence,
@@ -25,11 +26,13 @@ public abstract class Creature implements Fightable {
                     Integer lifePoints,
                     Collection<ProtectionItem> protectionItems) {
         this.creatureType = creatureType;
+        this.name = name;
         this.strength = strength;
         this.dexterity = dexterity;
         this.defence = defence;
         this.endurance = endurance;
         this.lifePoints = lifePoints;
+        this.lifePointsLeft = lifePoints;
         this.protectionItems.addAll(protectionItems);
     }
 
@@ -43,9 +46,10 @@ public abstract class Creature implements Fightable {
         if (successfulAttack(attempt)) {
             Optional<BodyPart> hitBodyPart = hitBodyPart();
             if (hitBodyPart.isPresent()) {
-                int potentialDamage = calculatePotentialDamage(hitBodyPart.get());
-                info("Attacking " + hitBodyPart + " with potential damage: " + potentialDamage);
-                return new AttackResult(hitBodyPart.get(), attempt, potentialDamage);
+                BodyPart bodyPart = hitBodyPart.get();
+                int potentialDamage = calculatePotentialDamage(bodyPart);
+                info("Attacking " + bodyPart + " with potential damage: " + potentialDamage);
+                return new AttackResult(bodyPart, attempt, potentialDamage);
             } else {
                 if (attempt < MAX_ATTACK_ATTEMPTS) {
                     info("Trying to attack again");
@@ -81,9 +85,9 @@ public abstract class Creature implements Fightable {
             if (effectiveDamage > 0) {
                 attack.setEffectiveDamage(effectiveDamage);
                 info("Got hit. Damage: " + effectiveDamage);
-                lifePoints = Math.max(0, lifePoints - effectiveDamage);
-                if (lifePoints > 0) {
-                    info("Life points left: " + lifePoints);
+                lifePointsLeft = Math.max(0, lifePointsLeft - effectiveDamage);
+                if (lifePointsLeft > 0) {
+                    info("Life points left: " + lifePointsLeft);
                 } else {
                     info("I'm dead :(");
                 }
@@ -110,7 +114,7 @@ public abstract class Creature implements Fightable {
     }
 
     public boolean isAlive() {
-        return lifePoints > 0;
+        return lifePointsLeft > 0;
     }
 
     public Optional<BodyPart> hitBodyPart() {
@@ -127,11 +131,19 @@ public abstract class Creature implements Fightable {
     }
 
     private void info(String s) {
-        System.out.println(creatureType + " : " + s);
+        System.out.println(name + " (" + creatureType + ") : " + s);
+    }
+
+    public void restoreLifePoints() {
+        this.lifePointsLeft = lifePoints;
     }
 
     public CreatureType getCreatureType() {
         return creatureType;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Integer getStrength() {
@@ -154,16 +166,23 @@ public abstract class Creature implements Fightable {
         return lifePoints;
     }
 
+    public Set<ProtectionItem> getProtectionItems() {
+        return Collections.unmodifiableSet(protectionItems);
+    }
+
     @Override
     public String toString() {
         return "Creature{" +
                 "creatureType=" + creatureType +
+                ", name='" + name + '\'' +
                 ", strength=" + strength +
                 ", dexterity=" + dexterity +
                 ", defence=" + defence +
                 ", endurance=" + endurance +
                 ", lifePoints=" + lifePoints +
                 ", protectionItems=" + protectionItems +
+                ", MAX_ATTACK_ATTEMPTS=" + MAX_ATTACK_ATTEMPTS +
                 '}';
     }
+
 }

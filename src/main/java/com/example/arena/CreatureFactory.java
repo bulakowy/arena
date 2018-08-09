@@ -1,5 +1,7 @@
 package com.example.arena;
 
+import com.github.javafaker.Faker;
+
 import java.util.*;
 
 public class CreatureFactory {
@@ -10,29 +12,39 @@ public class CreatureFactory {
         return CreatureType.values()[randomIdx];
     }
 
-    public Creature randomCreature() {
-        CreatureType creatureType = randomCreatureType();
+    public Creature newCreature(CreatureType creatureType, String name, Integer strength, Integer dexterity, Integer
+            defence, Integer endurance, Integer lifePoints, Collection<ProtectionItem> protectionItems) {
         switch (creatureType) {
             case DWARF:
-                return new Dwarf(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
-                        randomProtection());
+                return new Dwarf(name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
             case ELF:
-                return new Elf(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
-                        randomProtection());
+                return new Elf(name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
             case HALFING:
-                return new Halfing(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
-                        randomProtection());
+                return new Halfing(name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
             case HUMAN:
-                return new Human(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
-                        randomProtection());
+                return new Human(name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
             case ORC:
-                return new Orc(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
-                        randomProtection());
+                return new Orc(name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
             case TROLL:
             default:
-                return new Troll(random(1, 3), random(1, 10), random(1, 3), random(1, 3), random(50, 100),
-                        randomProtection());
+                return new Troll(name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
         }
+    }
+
+    public Creature randomCreature() {
+        CreatureType creatureType = randomCreatureType();
+        String name = randomName();
+        int strength = random(3, 3);
+        int dexterity = random(3, 3);
+        int defence = random(3, 3);
+        int endurance = random(3, 3);
+        int lifePoints = random(10, 10);
+        Collection<ProtectionItem> protectionItems = randomProtection();
+        return newCreature(creatureType, name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
+    }
+
+    private String randomName() {
+        return new Faker().name().firstName();
     }
 
     private Collection<ProtectionItem> randomProtection() {
@@ -63,5 +75,10 @@ public class CreatureFactory {
             ret.add(randomCreature());
         }
         return ret;
+    }
+
+    public Creature copyCreature(Creature c) {
+        return newCreature(c.getCreatureType(), c.getName(), c.getStrength(), c.getDexterity(), c.getDefence(), c
+                .getEndurance(), c.getLifePoints(), c.getProtectionItems());
     }
 }

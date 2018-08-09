@@ -28,7 +28,7 @@ public class CreatureTest {
 
         AttackResult attackResult = new AttackResult(BodyPart.HEAD, 1,
                 potentialDamage);
-        Creature c = new Human(1, 1, 1, endurance, 10, Collections.emptyList());
+        Creature c = new Human("Human", 1, 1, 1, endurance, 10, Collections.emptyList());
 
         // when
         AttackResult ar = c.dodge(attackResult);
@@ -49,7 +49,7 @@ public class CreatureTest {
 
         AttackResult attackResult = new AttackResult(BodyPart.HEAD, 1,
                 potentialDamage);
-        Creature c = new Human(1, 1, 1, endurance, lifePoints, Collections.emptyList());
+        Creature c = new Human("Human", 1, 1, 1, endurance, lifePoints, Collections.emptyList());
 
         // when
         AttackResult ar = c.dodge(attackResult);
@@ -71,7 +71,7 @@ public class CreatureTest {
 
         AttackResult attackResult = new AttackResult(BodyPart.HEAD, 1,
                 potentialDamage);
-        Creature c = new Human(1, 1, defence, 1, lifePoints, Collections.emptyList());
+        Creature c = new Human("Human", 1, 1, defence, 1, lifePoints, Collections.emptyList());
 
         // when
         AttackResult ar = c.dodge(attackResult);
