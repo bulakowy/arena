@@ -1,5 +1,9 @@
-package com.example.arena;
+package com.example.arena.service;
 
+import com.example.arena.model.Creature;
+import com.example.arena.model.CreaturePair;
+import com.example.arena.service.CreatureFactory;
+import com.example.arena.service.FightService;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.junit.Test;
 

@@ -1,5 +1,7 @@
-package com.example.arena;
+package com.example.arena.service;
 
+import com.example.arena.util.RandomUtil;
+import com.example.arena.model.*;
 import com.github.javafaker.Faker;
 
 import java.util.*;
@@ -33,7 +35,7 @@ public class CreatureFactory {
 
     public Creature randomCreature() {
         CreatureType creatureType = randomCreatureType();
-        String name = randomName();
+        String name = RandomUtil.randomName();
         int strength = random(3, 3);
         int dexterity = random(3, 3);
         int defence = random(3, 3);
@@ -41,10 +43,6 @@ public class CreatureFactory {
         int lifePoints = random(10, 10);
         Collection<ProtectionItem> protectionItems = randomProtection();
         return newCreature(creatureType, name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
-    }
-
-    private String randomName() {
-        return new Faker().name().firstName();
     }
 
     private Collection<ProtectionItem> randomProtection() {

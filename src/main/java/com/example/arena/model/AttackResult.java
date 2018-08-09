@@ -1,4 +1,4 @@
-package com.example.arena;
+package com.example.arena.model;
 
 public class AttackResult {
 

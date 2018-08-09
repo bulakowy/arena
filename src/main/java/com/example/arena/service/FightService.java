@@ -1,9 +1,21 @@
-package com.example.arena;
+package com.example.arena.service;
+
+import ch.qos.logback.core.util.ExecutorServiceUtil;
+import com.example.arena.model.AttackResult;
+import com.example.arena.model.Creature;
+import com.example.arena.model.CreaturePair;
+import com.example.arena.model.FightResult;
+import org.springframework.core.task.TaskExecutor;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class FightService {
 
+    private StatisticsService statisticsService = new StatisticsService();
     private CreatureFactory creatureFactory = new CreatureFactory();
 
     FightResult fight(Creature f1, Creature f2) {
@@ -22,14 +34,22 @@ public class FightService {
             }
         }
 
-        printStats(attacks);
+        System.out.println(statisticsService.getStatistics(attacks));
 
         return new FightResult(f1, f2, f1.isAlive() ? f1 : f2);
     }
 
-    void fightAll(List<Creature> creatures) {
+    public void fightAll(List<Creature> creatures) {
         List<CreaturePair> creaturePairs = generateDistinctCreaturePairs(creatures);
-        final List<FightResult> figthResults = new ArrayList<>();
+        System.out.println("DUPA: " + creaturePairs.size());
+        final List<FightResult> figthResults = Collections.synchronizedList(new ArrayList<>());
+
+        runInSeparateThreadsUsingExecutor(creaturePairs, figthResults);
+
+        printResults(figthResults);
+    }
+
+    private void runInSeparateThreads(List<CreaturePair> creaturePairs, List<FightResult> figthResults) {
         List<Thread> threads = new ArrayList<>();
         for (CreaturePair pair : creaturePairs) {
             Thread t = new Thread(() -> {
@@ -48,8 +68,27 @@ public class FightService {
                 e.printStackTrace();
             }
         }
+    }
 
-        printResults(figthResults);
+    private void runInSeparateThreadsUsingExecutor(List<CreaturePair> creaturePairs, List<FightResult> figthResults) {
+        ExecutorService executorService = Executors.newFixedThreadPool(1);
+        List<Callable<FightResult>> fights = new ArrayList<>();
+        for (CreaturePair pair : creaturePairs) {
+            Callable c = () -> {
+                FightResult result = fight(creatureFactory.copyCreature(pair.getLeft()),
+                        creatureFactory.copyCreature(pair.getRight()));
+                figthResults.add(result);
+                return result;
+            };
+            fights.add(c);
+        }
+
+        try {
+            List<Future<FightResult>> futures = executorService.invokeAll(fights);
+            executorService.shutdown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private AttackResult attack(Creature f1, Creature f2) {
@@ -58,56 +97,6 @@ public class FightService {
             res = f2.dodge(res);
         }
         return res;
-    }
-
-    private void printStats(Map<Creature, List<AttackResult>> attacks) {
-        printHitBodyPartsStats(attacks);
-        printStrongestHit(attacks);
-    }
-
-    private void printHitBodyPartsStats(Map<Creature, List<AttackResult>>
-                                                attacks) {
-        Map<BodyPart, Integer> hitBodyParts = new TreeMap<>();
-        for (List<AttackResult> l : attacks.values()) {
-            for (AttackResult attack : l) {
-                BodyPart hitBodyPart = attack.getHitBodyPart();
-                if (hitBodyPart != null) {
-                    Integer hits = hitBodyParts.get(hitBodyPart);
-                    if (hits == null) {
-                        hitBodyParts.put(hitBodyPart, 1);
-                    } else {
-                        hitBodyParts.put(hitBodyPart, hits + 1);
-                    }
-                }
-            }
-        }
-        System.out.println("Hit body parts statistics: " + hitBodyParts);
-
-        BodyPart mostHit = null;
-        int hits = 0;
-        for (Map.Entry<BodyPart, Integer> entry : hitBodyParts.entrySet()) {
-            if (entry.getValue() > hits) {
-                mostHit = entry.getKey();
-                hits = entry.getValue();
-            }
-        }
-        System.out.println("Body part hit most often: " + mostHit + ". Hits: " + hits);
-    }
-
-    private void printStrongestHit(Map<Creature, List<AttackResult>> attacks) {
-        int strongestHit = 0;
-        Creature strongestHitter = null;
-        for (Map.Entry<Creature, List<AttackResult>> entry : attacks.entrySet()) {
-            for (AttackResult attack : entry.getValue()) {
-                int potentialDamage = attack.getPotentialDamage();
-                if (potentialDamage > strongestHit) {
-                    strongestHit = potentialDamage;
-                    strongestHitter = entry.getKey();
-                }
-            }
-        }
-        System.out.println("Strongest hit (by potential damage): " +
-                strongestHit + " by " + strongestHitter.getName());
     }
 
     List<CreaturePair> generateDistinctCreaturePairs(List<Creature> creatures) {
@@ -145,6 +134,10 @@ public class FightService {
         });
 
         fightResults.forEach(fr -> points.put(fr.getWinner().getName(), points.get(fr.getWinner().getName()) + 1));
+
+        System.out.println("SUM = " + points.values().stream().mapToInt(i -> i).sum());
+
+        System.out.println(points.keySet().size());
 
         points.entrySet().stream().sorted(Comparator.comparing(e -> e.getValue())).forEach(entry -> System.out
                 .println(entry.getKey() + " : " + entry.getValue()));

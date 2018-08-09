@@ -1,4 +1,6 @@
-package com.example.arena;
+package com.example.arena.model;
+
+import com.example.arena.util.RandomUtil;
 
 import java.util.*;
 
@@ -164,6 +166,10 @@ public abstract class Creature implements Fightable, Cloneable {
 
     public Integer getLifePoints() {
         return lifePoints;
+    }
+
+    public Integer getLifePointsLeft() {
+        return lifePointsLeft;
     }
 
     public Set<ProtectionItem> getProtectionItems() {

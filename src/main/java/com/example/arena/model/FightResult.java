@@ -1,4 +1,6 @@
-package com.example.arena;
+package com.example.arena.model;
+
+import com.example.arena.model.Creature;
 
 public class FightResult {
 

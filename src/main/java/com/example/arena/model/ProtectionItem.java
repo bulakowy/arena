@@ -1,11 +1,12 @@
-package com.example.arena;
+package com.example.arena.model;
+
+import com.example.arena.util.RandomUtil;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
-import static com.example.arena.BodyPart.*;
-import static com.example.arena.BodyPart.RIGHT_ARM;
+import static com.example.arena.model.BodyPart.*;
+import static com.example.arena.model.BodyPart.RIGHT_ARM;
 
 public enum ProtectionItem {
     HELM(Arrays.asList(HEAD), 0, 2),

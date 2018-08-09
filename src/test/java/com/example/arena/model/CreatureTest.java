@@ -1,5 +1,10 @@
-package com.example.arena;
+package com.example.arena.model;
 
+import com.example.arena.model.AttackResult;
+import com.example.arena.model.BodyPart;
+import com.example.arena.model.Creature;
+import com.example.arena.model.Human;
+import com.example.arena.util.RandomUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -55,7 +60,7 @@ public class CreatureTest {
         AttackResult ar = c.dodge(attackResult);
 
         // then
-        assertTrue(lifePoints - (potentialDamage - endurance) == c.getLifePoints());
+        assertTrue(lifePoints - (potentialDamage - endurance) == c.getLifePointsLeft());
     }
 
     @Test

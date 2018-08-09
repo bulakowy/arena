@@ -1,4 +1,4 @@
-package com.example.arena;
+package com.example.arena.model;
 
 import java.util.Collection;
 
