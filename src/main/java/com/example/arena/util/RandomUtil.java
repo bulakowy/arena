@@ -1,21 +1,23 @@
 package com.example.arena.util;
 
 import com.github.javafaker.Faker;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class RandomUtil {
+@Component("trueRandom")
+public class RandomUtil implements IRandomUtil {
 
     private static Faker faker = new Faker();
     private static Set<String> names = new HashSet<>();
 
-    public static int random(int min, int max) {
+    public int random(int min, int max) {
         return new Random().nextInt(max - min + 1) + min;
     }
 
-    public static String randomName() {
+    public String randomName() {
         String name = null;
         while (name == null) {
             name = faker.name().firstName();

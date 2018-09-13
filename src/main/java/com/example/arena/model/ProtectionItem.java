@@ -1,12 +1,12 @@
 package com.example.arena.model;
 
-import com.example.arena.util.RandomUtil;
+import com.example.arena.util.IRandomUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.example.arena.model.BodyPart.*;
-import static com.example.arena.model.BodyPart.RIGHT_ARM;
 
 public enum ProtectionItem {
     HELM(Arrays.asList(HEAD), 0, 2),
@@ -18,6 +18,9 @@ public enum ProtectionItem {
     private List<BodyPart> protectedParts;
     private int minProtection;
     private int maxProtection;
+
+    @Autowired
+    IRandomUtil randomUtil;
 
     ProtectionItem(List<BodyPart> protectedParts, int minProtection, int maxProtection) {
         this.protectedParts = protectedParts;
@@ -38,6 +41,6 @@ public enum ProtectionItem {
     }
 
     public int getProtection() {
-        return RandomUtil.random(minProtection, maxProtection);
+        return randomUtil.random(minProtection, maxProtection);
     }
 }

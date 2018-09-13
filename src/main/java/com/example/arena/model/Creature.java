@@ -1,10 +1,13 @@
 package com.example.arena.model;
 
+import com.example.arena.util.IRandomUtil;
 import com.example.arena.util.RandomUtil;
 
 import java.util.*;
 
 public abstract class Creature implements Fightable, Cloneable {
+
+    IRandomUtil randomUtil = new RandomUtil();
 
     private final CreatureType creatureType;
     private final String name;
@@ -68,18 +71,19 @@ public abstract class Creature implements Fightable, Cloneable {
     }
 
     private boolean successfulAttack(int attempt) {
-        return attempt == 1 || dexterity > RandomUtil.random(1, 10);
+        return attempt == 1 || dexterity > randomUtil.random(1, 10);
     }
 
     int calculatePotentialDamage(BodyPart hitBodyPart) {
-        return strength + RandomUtil.random(0, 3) + hitBodyPart
+        return strength + randomUtil.random(0, 3) + hitBodyPart
                 .getHitBonus();
     }
 
     @Override
     public AttackResult dodge(AttackResult attack) {
         int effectiveDamage = 0;
-        boolean successfulDodge = defence > RandomUtil.random(1, 10);
+
+        boolean successfulDodge = defence > randomUtil.random(1, 10);
         if (successfulDodge) {
             info("Attack succefully dodged");
         } else {
@@ -120,7 +124,7 @@ public abstract class Creature implements Fightable, Cloneable {
     }
 
     public Optional<BodyPart> hitBodyPart() {
-        int random = RandomUtil.random(1, 100);
+        int random = randomUtil.random(1, 100);
         int offset = 0;
         for (BodyPart bodyPart : BodyPart.values()) {
             if (offset + bodyPart.getHitProbability() >= random) {

@@ -1,11 +1,9 @@
 package com.example.arena.service;
 
-import ch.qos.logback.core.util.ExecutorServiceUtil;
 import com.example.arena.model.AttackResult;
 import com.example.arena.model.Creature;
 import com.example.arena.model.CreaturePair;
 import com.example.arena.model.FightResult;
-import org.springframework.core.task.TaskExecutor;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -39,14 +37,14 @@ public class FightService {
         return new FightResult(f1, f2, f1.isAlive() ? f1 : f2);
     }
 
-    public void fightAll(List<Creature> creatures) {
+    public String fightAll(List<Creature> creatures) {
         List<CreaturePair> creaturePairs = generateDistinctCreaturePairs(creatures);
-        System.out.println("DUPA: " + creaturePairs.size());
+
         final List<FightResult> figthResults = Collections.synchronizedList(new ArrayList<>());
 
         runInSeparateThreadsUsingExecutor(creaturePairs, figthResults);
 
-        printResults(figthResults);
+        return getTournamentResult(figthResults);
     }
 
     private void runInSeparateThreads(List<CreaturePair> creaturePairs, List<FightResult> figthResults) {
@@ -126,7 +124,7 @@ public class FightService {
         return collection.size() != new HashSet<>(collection).size();
     }
 
-    private void printResults(List<FightResult> fightResults) {
+    private String getTournamentResult(List<FightResult> fightResults) {
         Map<String, Integer> points = new HashMap<>();
         fightResults.forEach(fr -> {
             points.put(fr.getFirst().getName(), 0);
@@ -135,12 +133,13 @@ public class FightService {
 
         fightResults.forEach(fr -> points.put(fr.getWinner().getName(), points.get(fr.getWinner().getName()) + 1));
 
-        System.out.println("SUM = " + points.values().stream().mapToInt(i -> i).sum());
+        StringBuilder sb = new StringBuilder();
 
-        System.out.println(points.keySet().size());
+        points.entrySet().stream()
+                .sorted(Comparator.comparing(e -> e.getValue()))
+                .forEach(entry -> sb.append(entry.getKey() + " : " + entry.getValue()).append("\n"));
 
-        points.entrySet().stream().sorted(Comparator.comparing(e -> e.getValue())).forEach(entry -> System.out
-                .println(entry.getKey() + " : " + entry.getValue()));
+        return sb.toString();
     }
 
 }

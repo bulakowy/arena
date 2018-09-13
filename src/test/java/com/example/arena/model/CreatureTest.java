@@ -29,7 +29,7 @@ public class CreatureTest {
         int endurance = 5;
 
         PowerMockito.mockStatic(RandomUtil.class);
-        Mockito.when(RandomUtil.random(anyInt(), anyInt())).thenReturn(10);
+//        Mockito.when(RandomUtil.random(anyInt(), anyInt())).thenReturn(10);
 
         AttackResult attackResult = new AttackResult(BodyPart.HEAD, 1,
                 potentialDamage);
@@ -50,7 +50,7 @@ public class CreatureTest {
         int lifePoints = 10;
 
         PowerMockito.mockStatic(RandomUtil.class);
-        Mockito.when(RandomUtil.random(anyInt(), anyInt())).thenReturn(10);
+//        Mockito.when(RandomUtil.random(anyInt(), anyInt())).thenReturn(10);
 
         AttackResult attackResult = new AttackResult(BodyPart.HEAD, 1,
                 potentialDamage);
@@ -72,7 +72,7 @@ public class CreatureTest {
         int defence = 5;
 
         PowerMockito.mockStatic(RandomUtil.class);
-        Mockito.when(RandomUtil.random(anyInt(), anyInt())).thenReturn(randomInt);
+//        Mockito.when(RandomUtil.random(anyInt(), anyInt())).thenReturn(randomInt);
 
         AttackResult attackResult = new AttackResult(BodyPart.HEAD, 1,
                 potentialDamage);

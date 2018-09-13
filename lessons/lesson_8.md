@@ -23,7 +23,7 @@ typ postaci, imie postaci, sila, zrecznosc, obrona, wytrzymalosc, liczba punktow
           "points": 30
         }
     ```  
-    \- pobranie informacji o turnieju (GET) - zwraca informacje ile jest miejsc w turnieju i ile z nich jest juz zajetych oraz  
+    \- pobranie informacji o turnieju (GET) - zwraca informacje ile jest miejsc w turnieju i ile z nich jest juz zajetych    
     \- pobranie listy zawodnikow zgloszonych do turnieju (GET) - zwraca liste zgloszonych zawodnikow razem z parametrami  
     \- pobranie liczby punktow do rozdysponowania miedzy poszczegolne umiejetnosci (GET) - suma wszystkich umiejetnosci zglaszanego zawodnika powinna byc rowna tej wartosci   
     \- zglaszanie zawodnika do turnieju (POST) - zgloszenie powinno byc w postaci jsona o nastepujacym formacie:
@@ -35,7 +35,8 @@ typ postaci, imie postaci, sila, zrecznosc, obrona, wytrzymalosc, liczba punktow
       "dexterity": 10,
       "defence": 10,
       "endurance": 10,
-      "lifePoints": 10
+      "lifePoints": 10,
+      "protectionItem": "HELM"
     }
     ```
     \- przeprowadzenie turnieju (POST)  

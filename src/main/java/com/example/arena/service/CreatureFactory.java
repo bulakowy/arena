@@ -1,12 +1,19 @@
 package com.example.arena.service;
 
+import com.example.arena.util.IRandomUtil;
 import com.example.arena.util.RandomUtil;
 import com.example.arena.model.*;
 import com.github.javafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class CreatureFactory {
+
+    @Autowired
+    IRandomUtil randomUtil;
 
     private CreatureType randomCreatureType() {
         int typesCount = CreatureType.values().length;
@@ -35,7 +42,7 @@ public class CreatureFactory {
 
     public Creature randomCreature() {
         CreatureType creatureType = randomCreatureType();
-        String name = RandomUtil.randomName();
+        String name = randomUtil.randomName();
         int strength = random(3, 3);
         int dexterity = random(3, 3);
         int defence = random(3, 3);
@@ -64,7 +71,7 @@ public class CreatureFactory {
     }
 
     private int random(int min, int max) {
-        return RandomUtil.random(min, max);
+        return randomUtil.random(min, max);
     }
 
     public List<Creature> randomCreatureList(int listSize) {
@@ -78,5 +85,11 @@ public class CreatureFactory {
     public Creature copyCreature(Creature c) {
         return newCreature(c.getCreatureType(), c.getName(), c.getStrength(), c.getDexterity(), c.getDefence(), c
                 .getEndurance(), c.getLifePoints(), c.getProtectionItems());
+    }
+
+    public Creature newCreature(FighterParams fighterParams) {
+        return newCreature(fighterParams.getCreatureType(), fighterParams.getName(), fighterParams.getStrength(),
+                fighterParams.getDexterity(), fighterParams.getDefence(), fighterParams.getEndurance(), fighterParams.getLifePoints(),
+                Arrays.asList(ProtectionItem.valueOf(fighterParams.getProtectionItem())));
     }
 }
