@@ -1,8 +1,8 @@
 package com.example.excercise;
 
-import com.example.arena.model.Creature;
+import com.example.arena.model.creature.Creature;
 import com.example.arena.service.CreatureFactory;
-import com.example.arena.model.CreatureType;
+import com.example.arena.model.creature.CreatureType;
 
 import java.util.Comparator;
 import java.util.List;

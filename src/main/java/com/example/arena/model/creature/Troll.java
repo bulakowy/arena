@@ -1,16 +1,18 @@
-package com.example.arena.model;
+package com.example.arena.model.creature;
+
+import com.example.arena.model.ProtectionItem;
 
 import java.util.Collection;
 
-public class Dwarf extends Creature {
+public class Troll extends Creature {
 
-    public Dwarf(String name,
+    public Troll(String name,
                  Integer strength,
                  Integer dexterity,
                  Integer defence,
                  Integer endurance,
                  Integer lifePoints,
                  Collection<ProtectionItem> protectionItems) {
-        super(CreatureType.DWARF, name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
+        super(CreatureType.TROLL, name, strength, dexterity, defence, endurance, lifePoints, protectionItems);
     }
 }

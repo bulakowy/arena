@@ -1,4 +1,6 @@
-package com.example.arena.model;
+package com.example.arena.model.creature;
+
+import com.example.arena.model.ProtectionItem;
 
 import java.util.Collection;
 

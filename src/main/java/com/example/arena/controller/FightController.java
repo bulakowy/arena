@@ -1,7 +1,8 @@
 package com.example.arena.controller;
 
-import com.example.arena.model.Creature;
-import com.example.arena.model.FighterParams;
+import com.example.arena.model.NoSuchTournamentException;
+import com.example.arena.model.creature.Creature;
+import com.example.arena.model.creature.CreatureParams;
 import com.example.arena.model.Tournament;
 import com.example.arena.model.TournamentParams;
 import com.example.arena.service.CreatureFactory;
@@ -53,9 +54,11 @@ public class FightController {
 
     @GetMapping("/tournaments/{id}/points")
     public String getTournamentPoints(@PathVariable int id) {
-        Tournament t = tournaments.get(id);
-        if (t == null) {
-            return "No such tournament";
+        Tournament t = null;
+        try {
+            t = tournaments.get(id);
+        } catch (Exception e) {
+            throw new NoSuchTournamentException(id);
         }
         return String.format("Points: %d", t.getPoints());
     }
@@ -69,13 +72,13 @@ public class FightController {
         return String.format("Points: %d", t.getPoints());
     }
 
-    @PostMapping("/tournaments/{tournamentId}/figthers")
-    public String addFighter(@PathVariable int tournamentId, @RequestBody FighterParams fighterParams) {
+    @PostMapping("/tournaments/{tournamentId}/fighters")
+    public String addFighter(@PathVariable int tournamentId, @RequestBody CreatureParams creatureParams) {
         Tournament t = tournaments.get(tournamentId);
         if (t == null) {
             return "No such tournament";
         }
-        Creature c = creatureFactory.newCreature(fighterParams);
+        Creature c = creatureFactory.newCreature(creatureParams);
         return "Fighter successfully added to the tournament";
     }
 
@@ -86,7 +89,7 @@ public class FightController {
             return "No such tournament";
         }
 
-        return "Fighter successfully added to the tournament";
+        return "Not implemented yet";
     }
 
     private String addTournament(Tournament t) {

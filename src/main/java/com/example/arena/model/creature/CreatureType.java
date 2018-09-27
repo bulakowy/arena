@@ -1,4 +1,4 @@
-package com.example.arena.model;
+package com.example.arena.model.creature;
 
 public enum CreatureType {
 

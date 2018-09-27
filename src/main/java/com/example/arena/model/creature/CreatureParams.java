@@ -1,6 +1,6 @@
-package com.example.arena.model;
+package com.example.arena.model.creature;
 
-public class FighterParams {
+public class CreatureParams {
 
     private CreatureType creatureType;
     private String name;

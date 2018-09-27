@@ -2,7 +2,7 @@ package com.example.arena.service;
 
 import com.example.arena.model.AttackResult;
 import com.example.arena.model.BodyPart;
-import com.example.arena.model.Creature;
+import com.example.arena.model.creature.Creature;
 
 import java.util.List;
 import java.util.Map;

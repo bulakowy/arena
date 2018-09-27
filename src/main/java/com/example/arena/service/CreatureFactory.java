@@ -1,9 +1,8 @@
 package com.example.arena.service;
 
+import com.example.arena.model.creature.*;
 import com.example.arena.util.IRandomUtil;
-import com.example.arena.util.RandomUtil;
 import com.example.arena.model.*;
-import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -87,9 +86,9 @@ public class CreatureFactory {
                 .getEndurance(), c.getLifePoints(), c.getProtectionItems());
     }
 
-    public Creature newCreature(FighterParams fighterParams) {
-        return newCreature(fighterParams.getCreatureType(), fighterParams.getName(), fighterParams.getStrength(),
-                fighterParams.getDexterity(), fighterParams.getDefence(), fighterParams.getEndurance(), fighterParams.getLifePoints(),
-                Arrays.asList(ProtectionItem.valueOf(fighterParams.getProtectionItem())));
+    public Creature newCreature(CreatureParams creatureParams) {
+        return newCreature(creatureParams.getCreatureType(), creatureParams.getName(), creatureParams.getStrength(),
+                creatureParams.getDexterity(), creatureParams.getDefence(), creatureParams.getEndurance(), creatureParams.getLifePoints(),
+                Arrays.asList(ProtectionItem.valueOf(creatureParams.getProtectionItem())));
     }
 }

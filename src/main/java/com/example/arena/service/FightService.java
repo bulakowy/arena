@@ -1,7 +1,7 @@
 package com.example.arena.service;
 
 import com.example.arena.model.AttackResult;
-import com.example.arena.model.Creature;
+import com.example.arena.model.creature.Creature;
 import com.example.arena.model.CreaturePair;
 import com.example.arena.model.FightResult;
 

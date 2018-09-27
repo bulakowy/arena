@@ -1,5 +1,7 @@
 package com.example.arena.model;
 
+import com.example.arena.model.creature.Creature;
+
 public class CreaturePair {
 
     private final Creature left;

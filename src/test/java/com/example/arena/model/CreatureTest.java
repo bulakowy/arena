@@ -1,13 +1,10 @@
 package com.example.arena.model;
 
-import com.example.arena.model.AttackResult;
-import com.example.arena.model.BodyPart;
-import com.example.arena.model.Creature;
-import com.example.arena.model.Human;
+import com.example.arena.model.creature.Creature;
+import com.example.arena.model.creature.Human;
 import com.example.arena.util.RandomUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -16,7 +13,6 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(fullyQualifiedNames = "com.example.arena.*")

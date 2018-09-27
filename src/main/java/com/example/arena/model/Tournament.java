@@ -1,5 +1,6 @@
 package com.example.arena.model;
 
+import com.example.arena.model.creature.Creature;
 import com.example.arena.service.FightService;
 import org.springframework.beans.factory.annotation.Autowired;
 

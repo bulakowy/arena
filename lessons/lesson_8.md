@@ -1,22 +1,26 @@
 ## Lekcja 8
 
-1. Dodaj do aplikacji mozliwosc przeprowadzenia turnieju dla zgloszonych postaci. W tym celu nalezy zaimplementowac 
-dwie nowe funkcjonalnosci:  
-\- dodawanie zawodnika do turnieju - parametrami wyjsciowymi metody powinny byc:
-typ postaci, imie postaci, sila, zrecznosc, obrona, wytrzymalosc, liczba punktow zycia i nazwa typu pancerza  
-\- przeprowadzenie turnieju - walczy kazdy z kazdym
+1. Dodaj do aplikacji możliwość przeprowadzenia turnieju dla zgłoszonych postaci. W tym celu należy zaimplementować:  
+\- nową klasę reprezentującą turniej: klasa powinna przechowywać informacje o:  
+\-- liczbie zawodników, którzy mogą wziąć udział w turnieju  
+\-- sumie punktów umiejętności, którą musi posiadać każdy zgłoszony zawodnik  
+\-- zgłoszonych zawodnikach - w formie wybranej kolekcji / mapy  
+\- dodawanie zawodnika do turnieju - parametrami wejściowymi metody powinny być:
+typ postaci, imię postaci, siła, zręczność, obrona, wytrzymałość, liczba punktów życia i nazwa typu pancerza  
+\- przeprowadzenie turnieju - walczy każdy z każdym
 
-2. Przywroc w klasie `ArenaApplication` annotacje @SpringBootApplication i metode `main`:
+2. Przywróć w klasie `ArenaApplication` annotację `@SpringBootApplication` i metode `main`:
     ```java
     public static void main(String[] args) {
         SpringApplication.run(ArenaApplication.class, args);
     }
     ```
 
-3. Stwórz nową klasę `FightController`, ktora zaimplementuje nastepujace metody restowe:  
+3. Stwórz nową klasę `FightController`, która zaimplementuje następujace metody restowe:  
     \- stworzenie nowego turnieju (POST), turniej jest opisywany dwoma parametrami: liczba uczestników
-    i liczba punktów do rozdysponowania miedzy umiejetnosci (suma wszystkich umiejetnosci powinna byc = tej liczbie).  
-    Oczekiwany format requestu:
+    i liczba punktów do rozdysponowania między umiejetności (siła, zręczność, obrona, wytrzymałość i liczba punktów życia) 
+	- suma wszystkich umiejętnosci powinna byc równa tej liczbie.  
+    Oczekiwany format body requestu:
     ```json
         {
           "capacity": 10,
