@@ -1,15 +1,15 @@
 package com.example.arena.model;
 
+import lombok.Value;
+
+import javax.validation.constraints.NotNull;
+
+@Value
 public class TournamentParams {
 
-    private int capacity;
-    private int points;
+    @NotNull
+    private Integer capacity;
+    @NotNull
+    private Integer points;
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public int getPoints() {
-        return points;
-    }
 }

@@ -12,7 +12,7 @@ public class TournamentDto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private Integer capacity;
-    private Integer points;
+    private final Integer capacity;
+    private final Integer points;
 
 }

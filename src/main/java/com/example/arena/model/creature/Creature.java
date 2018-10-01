@@ -3,11 +3,14 @@ package com.example.arena.model.creature;
 import com.example.arena.model.*;
 import com.example.arena.util.IRandomUtil;
 import com.example.arena.util.RandomUtil;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
 
+@Data
 public abstract class Creature implements Fightable, Cloneable {
 
     IRandomUtil randomUtil = new RandomUtil();
@@ -19,52 +22,8 @@ public abstract class Creature implements Fightable, Cloneable {
     private final Integer defence;
     private final Integer endurance;
     private final Integer lifePoints;
-    @Setter()
     private Integer lifePointsLeft;
 
-    public IRandomUtil getRandomUtil() {
-        return randomUtil;
-    }
-
-    public CreatureType getCreatureType() {
-        return creatureType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getStrength() {
-        return strength;
-    }
-
-    public Integer getDexterity() {
-        return dexterity;
-    }
-
-    public Integer getDefence() {
-        return defence;
-    }
-
-    public Integer getEndurance() {
-        return endurance;
-    }
-
-    public Integer getLifePoints() {
-        return lifePoints;
-    }
-
-    public Integer getLifePointsLeft() {
-        return lifePointsLeft;
-    }
-
-    public Set<ProtectionItem> getProtectionItems() {
-        return protectionItems;
-    }
-
-    public int getMAX_ATTACK_ATTEMPTS() {
-        return MAX_ATTACK_ATTEMPTS;
-    }
 
     private final Set<ProtectionItem> protectionItems = new HashSet<>();
 

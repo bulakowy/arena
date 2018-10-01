@@ -47,4 +47,9 @@ public class Tournament {
 }
 ```
 - Stwórz nową klasę odpowiedzialną za dostęp do tabeli `tournamet`:
+```java
+@Repository
+public interface TournamentRepository extends CrudRepository<TournamentDto, Integer> {
+}
+```
 

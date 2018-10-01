@@ -1,5 +1,7 @@
 package com.example.arena.controller;
 
+import com.example.arena.data.TournamentDto;
+import com.example.arena.data.TournamentRepository;
 import com.example.arena.model.NoSuchTournamentException;
 import com.example.arena.model.creature.Creature;
 import com.example.arena.model.creature.CreatureParams;
@@ -7,8 +9,10 @@ import com.example.arena.model.Tournament;
 import com.example.arena.model.TournamentParams;
 import com.example.arena.service.CreatureFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +20,17 @@ import java.util.List;
 public class FightController {
 
     @Autowired
+    private TournamentRepository tournamentRepository;
+
+    @Autowired
     private CreatureFactory creatureFactory;
 
     private List<Tournament> tournaments = new ArrayList<>();
 
     @PostMapping("/tournaments")
-    public String addNewTournament(@RequestBody TournamentParams tournamentParams) {
-        Tournament t = new Tournament(tournamentParams.getCapacity(), tournamentParams.getPoints(), tournaments.size());
-        return addTournament(t);
+    public TournamentDto addNewTournament(@RequestBody @Valid TournamentParams tournamentParams) {
+        TournamentDto t = new TournamentDto(tournamentParams.getCapacity(), tournamentParams.getPoints());
+        return tournamentRepository.save(t);
     }
 
     @PostMapping("/tournaments2")
